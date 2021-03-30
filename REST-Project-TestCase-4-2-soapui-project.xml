@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="a7889261-e4d0-4a3d-b378-c7314ce3a4d4" activeEnvironment="Default" name="REST Project TestCase 4.2" soapui-version="5.4.0" abortOnError="false" runType="SEQUENTIAL" resourceRoot="" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:RestService" id="2bb16b53-aa5a-41bf-a933-5630ff2e0a90" wadlVersion="http://wadl.dev.java.net/2009/02" name="http://api.zippopotam.us" type="rest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart=""/><con:endpoints><con:endpoint>http://api.zippopotam.us</con:endpoint></con:endpoints><con:resource name="Postal-code" path="/{country}/{postal-code}" id="c69e4eb6-e6de-4215-b075-708aaed0e147"><con:settings/><con:parameters><con:parameter><con:name>country</con:name><con:value>country</con:value><con:style>TEMPLATE</con:style><con:default>country</con:default><con:path xsi:nil="true"/><con:description xsi:nil="true"/></con:parameter><con:parameter><con:name>postal-code</con:name><con:value>postal-code</con:value><con:style>TEMPLATE</con:style><con:default>postal-code</con:default><con:path xsi:nil="true"/><con:description xsi:nil="true"/></con:parameter></con:parameters><con:method name="Postal-code 1" id="adee8000-6aff-4c41-913a-624060d58031" method="GET"><con:settings/><con:parameters/><con:representation type="FAULT"><con:mediaType>application/json</con:mediaType><con:status>404</con:status><con:params/><con:element>Fault</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType>application/json</con:mediaType><con:status>200</con:status><con:params/><con:element xmlns:pos="http://api.zippopotam.us/country/postal-code">pos:Response</con:element></con:representation><con:representation type="REQUEST"><con:mediaType>application/json</con:mediaType><con:params/></con:representation><con:representation type="REQUEST"><con:mediaType>application/jso</con:mediaType><con:params/></con:representation><con:request name="Request 1" id="50c75d7a-42d8-4ff3-ae95-56de03660fc5" mediaType="application/json"><con:settings/><con:endpoint>http://api.zippopotam.us</con:endpoint><con:request/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters>
+  <con:entry key="country" value="country"/>
+  <con:entry key="postal-code" value="postal-code"/>
+</con:parameters><con:parameterOrder><con:entry>country</con:entry><con:entry>postal-code</con:entry></con:parameterOrder></con:request></con:method></con:resource></con:interface><con:testSuite id="73ec48fd-1c85-4d34-829c-c002867b40d1" name="TestSuite TestCase 4.2"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="24c0c235-5b67-4c1c-bb0b-95b6602ebc9c" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TestCase 4.2" searchProperties="true"><con:settings/><con:testStep type="groovy" name="Groovy Script Initialisation of Variable" id="6d5ffeb6-da45-4ead-b4f3-045c718d242e"><con:settings/><con:config><script>
+
+def testCase = context.testCase
+PropertiesTestStep = testCase.getTestStepByName("Properties")
+
+
+PropertiesTestStep.setPropertyValue("counter",  "0")
+PropertiesTestStep.setPropertyValue("end", "False")</script></con:config></con:testStep><con:testStep type="groovy" name="Groovy Script Load Test Data" id="e79ed113-50a6-4d8d-91b0-0e457b5ae5b6"><con:settings/><con:config><script>import jxl.*
+
+
+def testCase = context.testCase
+def filePath = "C:\\Users\\bgadeu\\Desktop\\Automation_Task\\Automation_Task\\testdaten\\TestCase4_2.xls"
+
+
+Workbook  workbook = Workbook.getWorkbook (new File(filePath))
+Sheet countrySheet = workbook.getSheet(0)
+PropertiesTestStep = testCase.getTestStepByName("Properties")
+def count = PropertiesTestStep.getPropertyValue("counter").toInteger()
+
+
+
+if (PropertiesTestStep.getPropertyValue("total").toString() == '')
+       PropertiesTestStep.setPropertyValue("total", countrySheet.getRows().toString())
+
+count++
+
+Cell Field1 = countrySheet.getCell(0, count)
+Cell Field2 = countrySheet.getCell(1, count)
+Cell Field3 = countrySheet.getCell(2, count)
+
+log.info("count is " + count.toString() + "country: " + Field1.getContents() + "postal_Code: " + Field2.getContents()+ "place_Name: " + Field3.getContents())
+
+workbook.close()
+
+PropertiesTestStep.setPropertyValue("counter",  count.toString())
+PropertiesTestStep.setPropertyValue("country", Field1.getContents())
+PropertiesTestStep.setPropertyValue("postal_Code", Field2.getContents())
+PropertiesTestStep.setPropertyValue("place_Name", Field3.getContents())
+
+if ( count == PropertiesTestStep.getPropertyValue("total").toInteger() - 1)
+          PropertiesTestStep.setPropertyValue("End",  "True")
+          
+      
+
+</script></con:config></con:testStep><con:testStep type="properties" name="Properties" id="6129a385-239a-40df-85b1-26c8475e29c7"><con:settings/><con:config xsi:type="con:PropertiesStep" saveFirst="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:properties><con:property><con:name>country</con:name><con:value>ca</con:value></con:property><con:property><con:name>postal_Code</con:name><con:value>B2R</con:value></con:property><con:property><con:name>place_Name</con:name><con:value>Waverley</con:value></con:property><con:property><con:name>counter</con:name><con:value>3</con:value></con:property><con:property><con:name>total</con:name><con:value>4</con:value></con:property><con:property><con:name>end</con:name><con:value>True</con:value></con:property></con:properties></con:config></con:testStep><con:testStep type="transfer" name="Property Transfer" id="2354e330-90b5-4115-b16c-cd109a7f5b8a"><con:settings/><con:config xsi:type="con:PropertyTransfersStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:transfers setNullOnMissingSource="true" transferTextContent="true" failOnError="true" ignoreEmpty="false" transferToAll="false" entitize="false" transferChildNodes="false"><con:name>country</con:name><con:sourceType>country</con:sourceType><con:sourceStep>Properties</con:sourceStep><con:targetType>country</con:targetType><con:targetStep>#TestCase#</con:targetStep><con:upgraded>true</con:upgraded></con:transfers><con:transfers setNullOnMissingSource="true" transferTextContent="true" failOnError="true" ignoreEmpty="false" transferToAll="false" entitize="false" transferChildNodes="false"><con:name>postal_Code</con:name><con:sourceType>postal_Code</con:sourceType><con:sourceStep>Properties</con:sourceStep><con:targetType>postal_Code</con:targetType><con:targetStep>#TestCase#</con:targetStep><con:upgraded>true</con:upgraded></con:transfers><con:transfers setNullOnMissingSource="true" transferTextContent="true" failOnError="true" ignoreEmpty="false" transferToAll="false" entitize="false" transferChildNodes="false"><con:name>place_Name</con:name><con:sourceType>place_Name</con:sourceType><con:sourceStep>Properties</con:sourceStep><con:targetType>place_Name</con:targetType><con:targetStep>#TestCase#</con:targetStep><con:upgraded>true</con:upgraded></con:transfers><con:transfers setNullOnMissingSource="true" transferTextContent="true" failOnError="true" ignoreEmpty="false" transferToAll="false" entitize="false" transferChildNodes="false"><con:name>counter</con:name><con:sourceType>counter</con:sourceType><con:sourceStep>Properties</con:sourceStep><con:targetType>counter</con:targetType><con:targetStep>#TestCase#</con:targetStep><con:upgraded>true</con:upgraded></con:transfers></con:config></con:testStep><con:testStep type="restrequest" name="Postal-code 1" id="aacabf47-6504-48ac-8c67-603c3462382a"><con:settings/><con:config service="http://api.zippopotam.us" resourcePath="/{country}/{postal-code}" methodName="Postal-code 1" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="Postal-code 1" id="50c75d7a-42d8-4ff3-ae95-56de03660fc5" mediaType="application/json"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="Content-Type" value="application/jso" xmlns="http://eviware.com/soapui/config"/></con:setting></con:settings><con:endpoint>http://api.zippopotam.us</con:endpoint><con:request/><con:originalUri>http://api.zippopotam.us/country/postal-code</con:originalUri><con:assertion type="Valid HTTP Status Codes" id="adb819ad-a487-4faa-a51e-355834f421ed" name="Valid HTTP Status Codes"><con:configuration><codes>200</codes></con:configuration></con:assertion><con:assertion type="JsonPath Match" id="cbdc539f-aec9-4703-8078-2a6e0a87a0f4" name="JsonPath Match post_Code"><con:configuration><path>post code</path><content>${#TestCase#postal_Code}</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:assertion type="Simple Contains" id="7940df44-490b-4981-aea7-5a58567241bf" name="Contains country abreviation"><con:configuration><token>${#TestCase#country}</token><ignoreCase>true</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:assertion type="JsonPath Match" id="13c9bcf9-5464-4a13-8137-f52b32114147" name="JsonPath Match Place Name"><con:configuration><path>places[*].place name</path><content>[${#TestCase#place_Name}]</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:assertion type="Response SLA Assertion" id="65640177-6a79-415b-b5b4-f41d8de9fe5a" name="Response SLA"><con:configuration><SLA>1000</SLA></con:configuration></con:assertion><con:assertion type="Simple Contains" id="86a678d9-a7b2-49a2-8648-c93b7f121f00" name="Contains"><con:configuration><token>json</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters>
+  <con:entry key="country" value="${#TestCase#country}"/>
+  <con:entry key="postal-code" value="${#TestCase#postal_Code}"/>
+</con:parameters><con:parameterOrder><con:entry>country</con:entry><con:entry>postal-code</con:entry></con:parameterOrder></con:restRequest></con:config></con:testStep><con:testStep type="groovy" name="Groovy Script Loop" id="6a0203d2-12ed-49dd-a839-0afd10f69695"><con:settings/><con:config><script>def testCase = context.testCase
+PropertiesTestStep = testCase.getTestStepByName("Properties")
+
+
+if(PropertiesTestStep.getPropertyValue("end").toString() == "True" )
+      log.info("Exit Scriot")    
+else
+      testRunner.gotoStepByName("Groovy Script Load Test Data")  
+
+
+</script></con:config></con:testStep><con:testStep type="delay" name="Ende" id="cbcd0218-5105-4609-b12e-c027f0c27661"><con:settings/><con:config><delay>0</delay></con:config></con:testStep><con:properties><con:property><con:name>country</con:name><con:value>ca</con:value></con:property><con:property><con:name>postal_Code</con:name><con:value>B2R</con:value></con:property><con:property><con:name>place_Name</con:name><con:value>Waverley</con:value></con:property><con:property><con:name>counter</con:name><con:value>3</con:value></con:property></con:properties></con:testCase><con:properties/></con:testSuite><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/></con:soapui-project>
